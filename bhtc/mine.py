@@ -22,7 +22,7 @@ def calculate_hash(index, prev_hash, data, timestamp, nonce):
 
 def mine(last_block):
     index = int(last_block.index) + 1
-    timestamp = date.datetime.now()
+    timestamp = date.datetime.now().timestamp()
     data = "I'm block #%s" % (index)
     prev_hash = last_block.hash
     nonce = 0
@@ -40,13 +40,16 @@ def mine(last_block):
     block_data['data'] = data
     block_data['prev_hash'] = prev_hash
     block_data['hash'] = block_hash
+    block_data['nonce'] = nonce
 
     return Block(block_data)
 
 
 if __name__ == '__main__':
-    node_blocks = sorted(sync.sync(), key=lambda block: int(block.index))
+    # something is fucky and my array comes back in backwards or inconsistent order
+    # sort as a workaround for now to ensure proper order
+    node_blocks = sorted(sync.sync().blocks,
+                         key=lambda block: int(block.timestamp))
     prev_block = node_blocks[-1]
-    print(str(prev_block))
     new_block = mine(prev_block)
     new_block.self_save()
