@@ -1,9 +1,13 @@
+'''
+    blockchains need blocks yo
+'''
+
 import hashlib
 import os
 import datetime as date
 import json
 
-from config import *
+from config import BLOCK_VAR_CONVERSIONS, CHAINDATA_DIR, NUM_ZEROS
 
 
 class Block(object):
@@ -77,25 +81,3 @@ class Block(object):
 
     def __lt__(self, other):
         return self.timestamp > other.timestamp
-
-
-def create_first_block():
-    # index zero and arbitrary previous hash
-    block_data = {}
-    block_data['index'] = 0
-    block_data['timestamp'] = date.datetime.now().timestamp()
-    block_data['data'] = 'First block data'
-    block_data['prev_hash'] = ''
-    block_data['nonce'] = 0
-    block = Block(block_data)
-    return block
-
-
-if __name__ == '__main__':
-    # check if chaindata folder exists
-    chaindata_dir = 'chaindata/'
-    if not os.path.exists(chaindata_dir):
-        os.mkdir(chaindata_dir)
-    if os.listdir(chaindata_dir) == []:
-        first_block = create_first_block()
-        first_block.self_save()

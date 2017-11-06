@@ -1,29 +1,52 @@
 import os
-from config import *
-from mine import find_valid_nonce
-from block import Block
 import datetime
 
+import argparse
 
-def generate_first_block():
-    # index zero and arbitrary previous hash
-    block_data = {}
-    block_data['index'] = 0
-    block_data['timestamp'] = datetime.datetime.now().strftime('%s')
-    block_data['data'] = 'First block data'
-    block_data['prev_hash'] = ''
-    block_data['nonce'] = 0  # starting it at 0
-    return Block(block_data)
+from config import NUM_ZEROS, CHAINDATA_DIR
+import utils
+import sync
+
+
+def mine_first_block():
+    '''
+        Every blockchain need it's genesis yo
+    '''
+    first_block = utils.create_new_block_from_prev(
+        prev_block=None, data='First block yo.')
+    first_block.update_self_hash()
+
+    while str(first_block.hash[0:NUM_ZEROS]) != '0' * NUM_ZEROS:
+        first_block.nonce += 1
+        first_block.update_self_hash()
+
+    assert first_block.is_valid()
+    return first_block
 
 
 if __name__ == '__main__':
-    # check if dir is empty from just creation, or empty before
+    parser = argparse.ArgumentParser(description='Generating Blockchain')
+    parser.add_argument(
+        '--first',
+        '-f',
+        dest='first',
+        help='generate the first node ourselves'
+    )
+    args = parser.parse_args()
+
     if not os.path.exists(CHAINDATA_DIR):
-        # check if chaindata folder exists.
         os.mkdir(CHAINDATA_DIR)
-        # create and save first block
-        first_block = generate_first_block()
-        first_block = find_valid_nonce(first_block)
-        first_block.self_save()
-    elif os.listdir(CHAINDATA_DIR) == []:
-        print("Chaindata dir already exists with blocks.\nIf you want to regenerate the blocks, delete /chaindata and rerun")
+
+    if args.first:
+        if os.listdir(CHAINDATA_DIR) == []:
+            first_block = mine_first_block()
+            first_block.self_save()
+            filename = '%sdata.txt' % CHAINDATA_DIR
+            with open(filename, 'w') as data_file:
+                data_file.write('First Block. (this is the hook motherfucker)')
+        else:
+            print('chaindata directory already has files. If you want to generate a first block, delete files and rerun')
+    else:
+        # this is the expected case, sync from peers (fuck you mist y u take so long)
+        print('syncing')
+        sync.sync(save=True)

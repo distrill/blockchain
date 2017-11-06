@@ -1,7 +1,7 @@
 CHAINDATA_DIR = 'chaindata/'
-BROADCASTED_BLOCK_DIR = CHAINDATA_DIR + 'bblocs/'
+NUM_ZEROS = 5
+STANDARD_ROUNDS = 100000
 
-NUM_ZEROS = 5  # current difficulty
 BLOCK_VAR_CONVERSIONS = {
     'index': int,
     'nonce': int,

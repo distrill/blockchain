@@ -3,7 +3,7 @@ from block import Block
 
 class Chain(object):
     def __init__(self, blocks):
-        # this is the same fucker with order that has been noted in mine.py
+        # this is the same fuckery with order that has been noted in mine.py
         # for some reason there seems to be no guarantee that the blocks list
         # is in the same order as the index values from each block
         self.blocks = sorted(blocks,
@@ -72,7 +72,8 @@ class Chain(object):
         return self.__eq__(other) or self.__lt__(other)
 
     def most_recent_block(self):
-        return self.blocks[-1]
+        # same fuckery as noted above :gun:
+        return sorted(self.blocks, key=lambda block: block.index)[-1]
 
     def max_index(self):
         '''
@@ -96,4 +97,5 @@ class Chain(object):
         self.blocks.append(new_block)
 
     def block_list_dict(self):
-        return [b.to_dict() for b in self.blocks]
+        # more fuckery :gun: :fire:
+        return [b.to_dict() for b in sorted(self.blocks, key=lambda x: x.index)]
