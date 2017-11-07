@@ -2,21 +2,15 @@
     this is the bit that mines new coins in our blockchain
 '''
 
-import os
 import sys
-import datetime
-import time
-import json
-import hashlib
 import logging
-import glob
 
 import requests
 import apscheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from block import Block
-from config import *
+from config import STANDARD_ROUNDS, NUM_ZEROS
 from utils import create_new_block_from_prev
 import sync
 
@@ -81,7 +75,8 @@ def mine_for_block_listener(event):
             broadcast_mined_block(new_block)
             sched.add_job(mine_from_prev_block,
                           args=[new_block],
-                          kwargs={'rounds': STANDARD_ROUNDS, 'start_nonce': 0},
+                          kwargs={'rounds': STANDARD_ROUNDS,
+                                  'start_nonce': 0},
                           id='mining')
         else:
             print(event.retval)
@@ -99,7 +94,6 @@ def broadcast_mined_block(new_block):
     '''
     block_info_dict = new_block.to_dict()
     for peer in PEERS:
-        endpoint = "%s%s" % (peer[0], peer[1])
         try:
             requests.post(peer + 'mined', json=block_info_dict)
         except requests.exceptions.ConnectionError:

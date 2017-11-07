@@ -1,3 +1,8 @@
+'''
+    every blockchain gotta have a first block
+    (or sync with peers if any are active)
+'''
+
 import os
 import datetime
 

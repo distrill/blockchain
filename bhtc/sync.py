@@ -1,11 +1,12 @@
-from block import Block
-from chain import Chain
-from config import *
-
 import os
 import json
-import requests
 import glob
+
+import requests
+
+from block import Block
+from chain import Chain
+from config import CHAINDATA_DIR, PEERS
 
 
 def sync_local():

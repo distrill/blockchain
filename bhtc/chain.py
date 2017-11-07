@@ -1,7 +1,13 @@
-from block import Block
+'''
+    blockchains need blockchains yo
+'''
 
 
 class Chain(object):
+    '''
+        i already said this, blockchains need blockchains yo
+    '''
+
     def __init__(self, blocks):
         # this is the same fuckery with order that has been noted in mine.py
         # for some reason there seems to be no guarantee that the blocks list
@@ -35,14 +41,20 @@ class Chain(object):
         return True
 
     def find_block_by_index(self, index):
+        '''
+            stfu pylint
+        '''
         if len(self) <= index:
             return self.blocks[index]
         return False
 
     def find_block_by_hash(self, hash):
-        for b in self.blocks:
-            if b.has == hash:
-                return b
+        '''
+            stfu pylint
+        '''
+        for block in self.blocks:
+            if block.has == hash:
+                return block
         return False
 
     def __len__(self):
@@ -72,6 +84,9 @@ class Chain(object):
         return self.__eq__(other) or self.__lt__(other)
 
     def most_recent_block(self):
+        '''
+            get block with highest index. sorted b/c of fuckery
+        '''
         # same fuckery as noted above :gun:
         return sorted(self.blocks, key=lambda block: block.index)[-1]
 
@@ -97,5 +112,8 @@ class Chain(object):
         self.blocks.append(new_block)
 
     def block_list_dict(self):
+        '''
+            get list of dictionary representations of all blocks, sorted b/c fuckery
+        '''
         # more fuckery :gun: :fire:
         return [b.to_dict() for b in sorted(self.blocks, key=lambda x: x.index)]

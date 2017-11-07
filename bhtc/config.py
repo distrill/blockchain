@@ -1,3 +1,8 @@
+'''
+    config stuffs
+'''
+
+
 CHAINDATA_DIR = 'chaindata/'
 NUM_ZEROS = 5
 STANDARD_ROUNDS = 100000
@@ -7,7 +12,8 @@ BLOCK_VAR_CONVERSIONS = {
     'nonce': int,
     'hash': str,
     'prev_hash': str,
-    'timestamp': int
+    'timestamp': int,
+    'data': str,
 }
 
 PEERS = [
